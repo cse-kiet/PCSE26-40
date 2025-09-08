@@ -1,0 +1,133 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  phone     String?
+  location  String?  // GPS coordinates or address
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  farms        Farm[]
+  farmerProfile FarmerProfile?
+  
+  @@map("users")
+}
+
+// Farmer profile for storing detailed farming information
+model FarmerProfile {
+  id                String            @id @default(cuid())
+  cropName          String
+  soilType          String
+  sowingDate        DateTime
+  hasStorageCapacity Boolean
+  storageCapacity   Float?           // in tons or cubic meters
+  irrigationMethod  IrrigationMethod
+  farmingExperience Int?             // years of experience
+  farmSize          Float?           // in hectares
+  previousYield     Float?           // in tons per hectare
+  preferredLanguage String?          @default("en")
+  isOnboardingComplete Boolean       @default(false)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  
+  // Relations
+  userId            String           @unique
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("farmer_profiles")
+}
+
+// Enum for irrigation methods
+enum IrrigationMethod {
+  DRIP
+  SPRINKLER
+  FLOOD
+  FURROW
+  MANUAL
+  RAINFED
+  
+  @@map("irrigation_method")
+}
+
+// Farm model representing a farm property
+model Farm {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  location    String   // Can store coordinates or address
+  area        Float?   // Farm area in hectares
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fields      Field[]
+  
+  @@map("farms")
+}
+
+// Field model representing individual fields within a farm
+model Field {
+  id          String   @id @default(cuid())
+  name        String
+  coordinates String   // GeoJSON polygon coordinates
+  cropType    String?
+  area        Float?   // Field area in hectares
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  farmId      String
+  farm        Farm            @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  ndviData    NDVIReading[]
+  
+  @@map("fields")
+}
+
+// NDVI readings from satellite data
+model NDVIReading {
+  id        String   @id @default(cuid())
+  value     Float    // NDVI value (-1 to 1)
+  date      DateTime
+  source    String   // e.g., "agromonitoring", "farmonaut"
+  createdAt DateTime @default(now())
+  
+  // Relations
+  fieldId   String
+  field     Field    @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  
+  @@map("ndvi_readings")
+}
+
+// Weather data storage
+model WeatherData {
+  id          String   @id @default(cuid())
+  location    String   // Coordinates or location identifier
+  temperature Float?
+  humidity    Float?
+  rainfall    Float?
+  windSpeed   Float?
+  date        DateTime
+  source      String   // e.g., "openweather", "agromonitoring"
+  createdAt   DateTime @default(now())
+  
+  @@map("weather_data")
+}

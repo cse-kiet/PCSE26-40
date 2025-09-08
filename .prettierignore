@@ -1,0 +1,15 @@
+node_modules
+.next
+.git
+.vscode
+*.log
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+dist
+build
+coverage
+.env
+.env.local
+.env.production.local
+.env.test.local

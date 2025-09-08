@@ -1,314 +1,199 @@
-# 🌾 FarmSat - Satellite Data for Modern Farming
+🌾 FarmSat – Satellite Data for Smarter Farming
 
-A comprehensive farmer dashboard application that provides real-time satellite data, weather monitoring, soil analysis, and vegetation health tracking for precision agriculture.
+FarmSat is a farmer-friendly dashboard that brings real-time satellite insights, weather updates, soil conditions, and vegetation health tracking into one place.
+Think of it as a modern toolkit for precision farming, designed to make field management simple and data-driven.
 
-![Next.js](https://img.shields.io/badge/Next.js-15.2.4-black)
-![React](https://img.shields.io/badge/React-19-blue)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.1.9-38B2AC)
 
-## 🚀 Features
 
-### 🛰️ Satellite Monitoring
-- **NDVI Analysis**: Real-time vegetation health monitoring using Landsat-8 and Sentinel-2 data
-- **Historical Trends**: Track vegetation health over time with interactive charts
-- **Health Status**: Automatic assessment from Excellent to Very Poor
 
-### 🌤️ Weather Intelligence
-- **Real-time Weather**: Current conditions with temperature, humidity, wind, and pressure
-- **7-Day Forecast**: Extended weather predictions for farm planning
-- **Weather History**: Historical weather data analysis
 
-### 🌱 Soil Monitoring
-- **Temperature Tracking**: Surface and 10cm depth soil temperature monitoring
-- **Moisture Analysis**: Real-time soil moisture with status indicators
-- **Historical Data**: Soil condition trends over time
 
-### ☀️ UV Index Monitoring
-- **Current UV Levels**: Real-time UV index with risk assessment
-- **UV Forecast**: 7-day UV predictions
-- **Risk Management**: Automatic UV risk level classification
+🚀 What FarmSat Can Do
+🛰️ Satellite Monitoring
 
-### 🗺️ Field Management
-- **Interactive Maps**: Google Maps integration for field visualization
-- **Polygon Creation**: Create and manage field boundaries
-- **Field Analytics**: Comprehensive data for each field/polygon
+NDVI analysis with Landsat-8 & Sentinel-2
 
-### 📊 Dashboard Features
-- **Real-time Updates**: Live data refresh with customizable intervals
-- **Interactive Charts**: Recharts-powered visualization
-- **Multi-language Support**: English and Hindi language options
-- **Responsive Design**: Mobile-first approach with modern UI
+Track vegetation health trends over time
 
-## 📋 Prerequisites
+Simple health status: Excellent → Very Poor
 
-Before setting up the project, make sure you have:
+🌤️ Weather Insights
 
-- **Node.js** (version 18 or higher)
-- **npm**, **yarn**, or **pnpm** package manager
-- **Git** for version control
+Live weather data (temp, humidity, wind, pressure)
 
-### Required API Keys
+7-day forecasts for farm planning
 
-You'll need to obtain API keys from the following services:
+Weather history for past trend analysis
 
-1. **Agromonitoring API**: 
-   - Visit [agromonitoring.com/api](https://agromonitoring.com/api)
-   - Sign up for an account and get your API key
+🌱 Soil Conditions
 
-2. **Google Maps API** (optional for maps functionality):
-   - Visit [Google Cloud Console](https://console.cloud.google.com)
-   - Enable Maps JavaScript API and get your API key
+Soil temperature (surface & 10cm depth)
 
-## 🛠️ Installation
+Real-time soil moisture readings
 
-### 1. Clone the Repository
+Historical soil condition tracking
 
-```bash
+☀️ UV Monitoring
+
+Live UV index + risk level
+
+7-day UV forecast
+
+Smart UV risk alerts
+
+🗺️ Field Management
+
+Interactive maps with Google Maps
+
+Draw and save field boundaries (polygons)
+
+View field-specific data & analytics
+
+📊 Dashboard Features
+
+Real-time updates with customizable refresh
+
+Charts powered by Recharts
+
+English + Hindi language support
+
+Responsive UI that works on mobile too
+
+🛠️ Setup Guide
+Prerequisites
+
+Node.js (v18+)
+
+npm, yarn, or pnpm
+
+Git
+
+API keys:
+
+Agromonitoring
+ (required)
+
+Google Maps API
+ (optional, for maps)
+
+Installation
+
+Clone the repo:
+
 git clone https://github.com/yourusername/farmer-dashboard.git
 cd farmer-dashboard
-```
 
-### 2. Install Dependencies
 
-Using npm:
-```bash
+Install dependencies:
+
 npm install
-```
-
-Using yarn:
-```bash
+# or
 yarn install
-```
-
-Using pnpm:
-```bash
+# or
 pnpm install
-```
 
-### 3. Environment Setup
 
-Create a `.env.local` file in the root directory:
+Set up your .env.local:
 
-```bash
 cp .env.example .env.local
-```
 
-Add your API keys to `.env.local`:
 
-```env
-# Agromonitoring API
-NEXT_PUBLIC_AGROMONITORING_API_KEY=your_agromonitoring_api_key_here
+Fill it with your keys:
 
-# Google Maps API (optional)
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
-
-# Additional environment variables
+NEXT_PUBLIC_AGROMONITORING_API_KEY=your_key_here
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_key_here
 NEXT_PUBLIC_APP_URL=http://localhost:3000
-```
 
-### 4. Start the Development Server
 
-```bash
+Run the dev server:
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-## 🔧 Configuration
+Now open 👉 http://localhost:3000
 
-### API Configuration
+📱 How to Use
 
-1. **Initial Setup**: When you first run the application, you'll be prompted to configure your API keys
-2. **Agromonitoring Setup**: Enter your Agromonitoring API key in the configuration screen
-3. **Test Connection**: The system will automatically test your API connection
-4. **Google Maps** (optional): Configure Google Maps API for enhanced mapping features
+Start the server and open the app
 
-### User Authentication
+Add your API keys when prompted
 
-The application uses a simple form-based authentication system:
+Create your farmer profile (name, mobile, pincode)
 
-1. **User Registration**: Enter full name, mobile number, and pincode
-2. **Location Access**: Allow location access for better weather and soil data
-3. **Dashboard Access**: Once configured, access the main dashboard
+Add fields by drawing polygons on the map
 
-## 📱 Usage
+Get instant access to vegetation, weather, soil, and UV data
 
-### Getting Started
-
-1. **Launch Application**: Start the development server and navigate to the app
-2. **Configure APIs**: Set up your Agromonitoring API key
-3. **Create Account**: Fill in your farmer profile information
-4. **Create Fields**: Add your farm fields using the polygon creator
-5. **Monitor Data**: View real-time satellite, weather, and soil data
-
-### Creating Farm Fields
-
-1. Navigate to the **Field Management** section
-2. Click **"Create Field"**
-3. Enter field name and coordinates
-4. The system will create a polygon in Agromonitoring
-5. Start monitoring your field data immediately
-
-### Dashboard Navigation
-
-- **Overview**: Quick status cards showing current conditions
-- **Weather Tab**: Current weather and 7-day forecast
-- **NDVI Tab**: Vegetation health trends and analysis
-- **Soil Tab**: Temperature and moisture monitoring
-- **UV Tab**: UV index tracking and risk assessment
-
-## 🏗️ Project Structure
-
-```
+🏗️ Project Layout
 farmer-dashboard/
-├── app/                      # Next.js app directory
-│   ├── dashboard/           # Dashboard pages
-│   ├── globals.css         # Global styles
-│   ├── layout.tsx          # Root layout
-│   └── page.tsx            # Landing page
-├── components/             # React components
-│   ├── ui/                # UI components (Radix UI + Tailwind)
-│   ├── comprehensive-dashboard.tsx
-│   ├── google-maps-integration.tsx
-│   ├── weather-dashboard.tsx
-│   └── ...
-├── hooks/                 # Custom React hooks
-│   ├── use-agromonitoring-comprehensive.ts
-│   ├── use-farmonaut-data.ts
-│   └── ...
-├── lib/                   # Utility libraries
-│   ├── agromonitoring-api.ts
-│   ├── google-maps-loader.ts
-│   └── utils.ts
+├── app/                  # Next.js app routes
+├── components/           # Reusable UI + custom components
+├── hooks/                # Custom React hooks
+├── lib/                  # API clients & helpers
 ├── public/               # Static assets
-└── styles/              # Additional styles
-```
+└── styles/               # Global styles
 
-## 🧪 Development
+🔧 Development
 
-### Available Scripts
+Common scripts:
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-- `npm run lint:fix` - Fix ESLint errors
-- `npm run format` - Format code with Prettier
-- `npm run format:check` - Check code formatting
+npm run dev → Start dev server
 
-### Adding New Features
+npm run build → Build for production
 
-1. **API Integration**: Add new API clients in `lib/` directory
-2. **Data Hooks**: Create custom hooks in `hooks/` directory
-3. **UI Components**: Add new components in `components/` directory
-4. **Pages**: Add new pages in `app/` directory
+npm run start → Run production server
 
-### Code Style
+npm run lint → Check linting
 
-The project uses:
-- **ESLint** for code linting
-- **Prettier** for code formatting
-- **TypeScript** for type safety
-- **Tailwind CSS** for styling
+npm run format → Format with Prettier
 
-## 🔍 Troubleshooting
+Conventions:
 
-### Common Issues
+TypeScript everywhere
 
-1. **"Agromonitoring API not initialized"**
-   - Ensure your API key is correctly configured
-   - Check the API configuration screen
+ESLint + Prettier enforced
 
-2. **"401 Unauthorized - Invalid API key"**
-   - Verify your Agromonitoring API key is valid
-   - Check for extra spaces or characters
+Tailwind CSS for styling
 
-3. **Missing Data**
-   - Some historical data may not be available for new polygons
-   - Weather data requires a few minutes to populate
+🐞 Troubleshooting
 
-4. **Map Loading Issues**
-   - Ensure Google Maps API key is configured (if using maps)
-   - Check network connectivity
+Agromonitoring not initialized → Check .env.local key
 
-### Debug Mode
+401 Unauthorized → API key typo or missing
 
-Enable debug mode by setting `NODE_ENV=development` in your environment. This will:
-- Show detailed error messages
-- Enable console logging
-- Display additional debugging information
+No historical data → Polygon might be new
 
-For more detailed debugging information, see [DEBUGGING.md](./DEBUGGING.md).
+Map not loading → Missing/invalid Google Maps key
 
-## 🤝 Contributing
+🤝 Contributing
 
-Contributions are welcome! Please follow these steps:
+Pull requests are welcome!
 
-1. **Fork the repository**
-2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
-3. **Commit your changes**: `git commit -m 'Add amazing feature'`
-4. **Push to the branch**: `git push origin feature/amazing-feature`
-5. **Open a Pull Request**
+Fork this repo
 
-### Development Guidelines
+Create a branch (git checkout -b feature/new-feature)
 
-- Follow the existing code style
-- Add TypeScript types for new features
-- Write meaningful commit messages
-- Test your changes thoroughly
-- Update documentation as needed
+Commit changes (git commit -m "Added something cool")
 
-## 📄 License
+Push (git push origin feature/new-feature)
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Open a PR 🎉
 
-## 🙏 Acknowledgments
+📄 License
 
-- **Agromonitoring API** for satellite and agricultural data
-- **OpenWeatherMap** for weather services
-- **Google Maps** for mapping services
-- **Vercel** for deployment platform
-- **Radix UI** for accessible UI components
-- **Tailwind CSS** for styling framework
+MIT License – free to use and modify. See LICENSE
+.
 
-## 📞 Support
+🙏 Thanks To
 
-For support and questions:
+Agromonitoring API – Satellite data
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/farmer-dashboard/issues)
-- **Documentation**: Check the `AGROMONITORING_INTEGRATION.md` for detailed API documentation
-- **Debugging**: Refer to `DEBUGGING.md` for troubleshooting
+OpenWeatherMap – Weather data
 
-## 🚀 Deployment
+Google Maps – Mapping
 
-### Deploy on Vercel
+Radix UI + Tailwind – Beautiful UI
 
-1. **Connect Repository**: Connect your GitHub repository to Vercel
-2. **Environment Variables**: Add your environment variables in Vercel dashboard
-3. **Deploy**: Vercel will automatically deploy your application
+Vercel – Hosting & deployment
 
-### Deploy on Other Platforms
-
-The application can be deployed on any platform that supports Next.js:
-
-- **Netlify**
-- **Railway**
-- **DigitalOcean App Platform**
-- **AWS Amplify**
-
-Make sure to:
-- Set up environment variables
-- Configure build commands (`npm run build`)
-- Set start command (`npm run start`)
-
----
-
-**Built with ❤️ for modern farming and precision agriculture**
-#   P C S E 2 6 - 4 0  
- #   P C S E 2 6 - 4 0  
- 
+Built with ❤️ to make farming smarter, simpler, and more sustainable.
