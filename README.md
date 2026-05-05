@@ -1,199 +1,234 @@
-🌾 FarmSat – Satellite Data for Smarter Farming
+# 🌾 FarmSat – Satellite Data for Smarter Farming
 
-FarmSat is a farmer-friendly dashboard that brings real-time satellite insights, weather updates, soil conditions, and vegetation health tracking into one place.
-Think of it as a modern toolkit for precision farming, designed to make field management simple and data-driven.
+**FarmSat** is a farmer-friendly dashboard that brings real-time satellite insights, weather updates, soil conditions, and vegetation health tracking into one place.
 
+Think of it as a modern toolkit for **precision farming**, designed to make field management simple and data-driven.
 
+---
 
+## 🚀 Features
 
+### 🛰️ Satellite Monitoring
 
+* NDVI analysis using **Landsat-8** & **Sentinel-2**
+* Track vegetation health trends over time
+* Simple health classification:
+  **Excellent → Good → Moderate → Poor → Very Poor**
 
-🚀 What FarmSat Can Do
-🛰️ Satellite Monitoring
+---
 
-NDVI analysis with Landsat-8 & Sentinel-2
+### 🌤️ Weather Insights
 
-Track vegetation health trends over time
+* Live weather data:
 
-Simple health status: Excellent → Very Poor
+  * Temperature
+  * Humidity
+  * Wind
+  * Pressure
+* 7-day forecast for planning
+* Historical weather trend analysis
 
-🌤️ Weather Insights
+---
 
-Live weather data (temp, humidity, wind, pressure)
+### 🌱 Soil Conditions
 
-7-day forecasts for farm planning
+* Soil temperature:
 
-Weather history for past trend analysis
+  * Surface level
+  * 10 cm depth
+* Real-time soil moisture readings
+* Historical soil data tracking
 
-🌱 Soil Conditions
+---
 
-Soil temperature (surface & 10cm depth)
+### ☀️ UV Monitoring
 
-Real-time soil moisture readings
+* Live UV index with risk levels
+* 7-day UV forecast
+* Smart UV risk alerts
 
-Historical soil condition tracking
+---
 
-☀️ UV Monitoring
+### 🗺️ Field Management
 
-Live UV index + risk level
+* Interactive maps (Google Maps integration)
+* Draw & save field boundaries (polygons)
+* Field-specific insights and analytics
 
-7-day UV forecast
+---
 
-Smart UV risk alerts
+### 📊 Dashboard Features
 
-🗺️ Field Management
+* Real-time updates with customizable refresh
+* Interactive charts powered by **Recharts**
+* Multi-language support:
 
-Interactive maps with Google Maps
+  * English
+  * Hindi
+* Fully responsive (mobile-friendly)
 
-Draw and save field boundaries (polygons)
+---
 
-View field-specific data & analytics
+## 🛠️ Setup Guide
 
-📊 Dashboard Features
+### 📌 Prerequisites
 
-Real-time updates with customizable refresh
+* Node.js (v18+)
+* npm / yarn / pnpm
+* Git
 
-Charts powered by Recharts
+### 🔑 API Keys Required
 
-English + Hindi language support
+* Agromonitoring (**required**)
+* Google Maps (**optional**, for map features)
 
-Responsive UI that works on mobile too
+---
 
-🛠️ Setup Guide
-Prerequisites
+### ⚙️ Installation
 
-Node.js (v18+)
+#### 1. Clone the repository
 
-npm, yarn, or pnpm
-
-Git
-
-API keys:
-
-Agromonitoring
- (required)
-
-Google Maps API
- (optional, for maps)
-
-Installation
-
-Clone the repo:
-
+```bash
 git clone https://github.com/yourusername/farmer-dashboard.git
 cd farmer-dashboard
+```
 
+#### 2. Install dependencies
 
-Install dependencies:
-
+```bash
 npm install
 # or
 yarn install
 # or
 pnpm install
+```
 
+#### 3. Setup environment variables
 
-Set up your .env.local:
-
+```bash
 cp .env.example .env.local
+```
 
+Update `.env.local`:
 
-Fill it with your keys:
-
+```env
 NEXT_PUBLIC_AGROMONITORING_API_KEY=your_key_here
 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_key_here
 NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
 
+#### 4. Run the development server
 
-Run the dev server:
-
+```bash
 npm run dev
+```
 
+👉 Open in browser: **[http://localhost:3000](http://localhost:3000)**
 
-Now open 👉 http://localhost:3000
+---
 
-📱 How to Use
+## 📱 How to Use
 
-Start the server and open the app
+1. Start the server and open the app
+2. Add your API keys when prompted
+3. Create your farmer profile:
 
-Add your API keys when prompted
+   * Name
+   * Mobile number
+   * Pincode
+4. Add fields by drawing polygons on the map
+5. Access real-time insights:
 
-Create your farmer profile (name, mobile, pincode)
+   * Vegetation
+   * Weather
+   * Soil
+   * UV data
 
-Add fields by drawing polygons on the map
+---
 
-Get instant access to vegetation, weather, soil, and UV data
+## 🏗️ Project Structure
 
-🏗️ Project Layout
+```
 farmer-dashboard/
-├── app/                  # Next.js app routes
-├── components/           # Reusable UI + custom components
-├── hooks/                # Custom React hooks
-├── lib/                  # API clients & helpers
-├── public/               # Static assets
-└── styles/               # Global styles
+├── app/          # Next.js app routes
+├── components/   # Reusable UI components
+├── hooks/        # Custom React hooks
+├── lib/          # API clients & helpers
+├── public/       # Static assets
+└── styles/       # Global styles
+```
 
-🔧 Development
+---
 
-Common scripts:
+## 🔧 Development
 
-npm run dev → Start dev server
+### Common Scripts
 
-npm run build → Build for production
+```bash
+npm run dev     # Start development server
+npm run build   # Build for production
+npm run start   # Run production server
+npm run lint    # Lint code
+npm run format  # Format code (Prettier)
+```
 
-npm run start → Run production server
+### Code Conventions
 
-npm run lint → Check linting
+* TypeScript throughout
+* ESLint + Prettier enforced
+* Tailwind CSS for styling
 
-npm run format → Format with Prettier
+---
 
-Conventions:
+## 🐞 Troubleshooting
 
-TypeScript everywhere
+| Issue                          | Solution                     |
+| ------------------------------ | ---------------------------- |
+| Agromonitoring not initialized | Check `.env.local` API key   |
+| 401 Unauthorized               | Verify API key               |
+| No historical data             | Polygon may be newly created |
+| Map not loading                | Check Google Maps API key    |
 
-ESLint + Prettier enforced
+---
 
-Tailwind CSS for styling
-
-🐞 Troubleshooting
-
-Agromonitoring not initialized → Check .env.local key
-
-401 Unauthorized → API key typo or missing
-
-No historical data → Polygon might be new
-
-Map not loading → Missing/invalid Google Maps key
-
-🤝 Contributing
+## 🤝 Contributing
 
 Pull requests are welcome!
 
-Fork this repo
+1. Fork the repository
+2. Create a feature branch
 
-Create a branch (git checkout -b feature/new-feature)
+   ```bash
+   git checkout -b feature/new-feature
+   ```
+3. Commit your changes
 
-Commit changes (git commit -m "Added something cool")
+   ```bash
+   git commit -m "Added something cool"
+   ```
+4. Push to your branch
 
-Push (git push origin feature/new-feature)
+   ```bash
+   git push origin feature/new-feature
+   ```
+5. Open a PR 🎉
 
-Open a PR 🎉
+---
 
-📄 License
+## 📄 License
 
-MIT License – free to use and modify. See LICENSE
-.
+MIT License – free to use and modify.
 
-🙏 Thanks To
+---
 
-Agromonitoring API – Satellite data
+## 🙏 Acknowledgements
 
-OpenWeatherMap – Weather data
+* Agromonitoring API – Satellite data
+* OpenWeatherMap – Weather data
+* Google Maps – Mapping
+* Radix UI + Tailwind – UI components
+* Vercel – Hosting & deployment
 
-Google Maps – Mapping
+---
 
-Radix UI + Tailwind – Beautiful UI
-
-Vercel – Hosting & deployment
-
-Built with ❤️ to make farming smarter, simpler, and more sustainable.
+Built with ❤️ to make farming **smarter, simpler, and more sustainable**.
