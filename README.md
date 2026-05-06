@@ -1,6 +1,6 @@
-🌾 FarmSat – Satellite Data for Smarter Farming
+🌾 AgriVision – Satellite Data for Smarter Farming
 
-FarmSat is a farmer-friendly dashboard that brings real-time satellite insights, weather updates, soil conditions, and vegetation health tracking into one place.
+AgriVision is a farmer-friendly dashboard that brings real-time satellite insights, weather updates, soil conditions, and vegetation health tracking into one place.
 Think of it as a modern toolkit for precision farming, designed to make field management simple and data-driven.
 
 
@@ -8,7 +8,7 @@ Think of it as a modern toolkit for precision farming, designed to make field ma
 
 
 
-🚀 What FarmSat Can Do
+🚀 What AgriVision Can Do
 🛰️ Satellite Monitoring
 
 NDVI analysis with Landsat-8 & Sentinel-2

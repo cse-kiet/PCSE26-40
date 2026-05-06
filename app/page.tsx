@@ -11,9 +11,9 @@ import { ComprehensiveOnboarding } from "@/components/comprehensive-onboarding"
 // 1. Translations Object for Multi-language support
 const translations = {
   en: {
-    title: "FarmSat",
+    title: "AgriVision",
     subtitle: "AI-powered farming assistant with satellite data",
-    welcomeTitle: "Welcome to FarmSat",
+    welcomeTitle: "Welcome to AgriVision",
     welcomeDescription: "Grow smarter with localized insights from weather, soil and satellites",
     setupButton: "🌱 Set Up My Farm Profile",
     setupIncludes: "Complete setup includes:",

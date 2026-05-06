@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
       },
       create: {
         id: userId,
-        email: `${userId}@farmsat.temp`, // Temporary email
+        email: `${userId}@agrivision.temp`, // Temporary email
         name: fullName,
         phone: mobile,
         location: `${pincode}${location ? ` (${location.lat},${location.lng})` : ''}`

@@ -17,7 +17,7 @@ const manrope = Manrope({
 })
 
 export const metadata: Metadata = {
-  title: "FarmSat - Satellite Data for Farmers",
+  title: "AgriVision - Satellite Data for Farmers",
   description: "Professional satellite data dashboard for modern agriculture",
   generator: "v0.app",
 }

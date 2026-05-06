@@ -61,6 +61,10 @@ function DashboardContent() {
       storageCapacity?: number
     }
   } | null>(null)
+  
+  // Database profile data with farms and fields
+  const [dbProfileData, setDbProfileData] = useState<any>(null)
+  const [loadingProfile, setLoadingProfile] = useState(false)
 
   // Use the comprehensive polygon management hook - only after API is configured
   const { polygons, loading: polygonsLoading, refetch: refetchPolygons } = useUserPolygons(isAPIConfigured)
@@ -102,6 +106,23 @@ function DashboardContent() {
       setIsAPIConfigured(false)
     }
   }, [])
+
+  // Fetch complete profile data from database when user data is loaded
+  useEffect(() => {
+    if (userData?.userId) {
+      setLoadingProfile(true)
+      fetch(`/api/user-profile?userId=${userData.userId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            setDbProfileData(data.user)
+            console.log("[Dashboard] Database profile loaded:", data.user)
+          }
+        })
+        .catch(err => console.error('[Dashboard] Error fetching profile:', err))
+        .finally(() => setLoadingProfile(false))
+    }
+  }, [userData?.userId])
 
   // Auto-select first polygon if none selected
   useEffect(() => {
@@ -194,7 +215,7 @@ function DashboardContent() {
                 <Activity className="w-5 h-5 text-sidebar-primary-foreground" />
               </div>
               <div>
-                <h1 className="font-bold text-sidebar-foreground">FarmSat</h1>
+                <h1 className="font-bold text-sidebar-foreground">AgriVision</h1>
                 <p className="text-xs text-muted-foreground">Satellite Data</p>
               </div>
             </div>
@@ -407,6 +428,70 @@ function DashboardContent() {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Farms and Fields Card */}
+              {dbProfileData?.farms && dbProfileData.farms.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>🚜 Your Farms & Fields</CardTitle>
+                    <CardDescription>
+                      {dbProfileData.farms.length} farm(s) with {dbProfileData.farms.reduce((total: number, farm: any) => total + farm.fieldCount, 0)} total field(s)
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {dbProfileData.farms.map((farm: any) => (
+                      <div key={farm.id} className="border rounded-lg p-4 space-y-3">
+                        <div>
+                          <div className="text-sm font-semibold text-foreground flex items-center gap-2">
+                            <Badge variant="secondary">{farm.name}</Badge>
+                            <span className="text-xs text-muted-foreground">
+                              {farm.fieldCount} field(s)
+                            </span>
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-1">{farm.description}</p>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div>
+                            <span className="text-muted-foreground">Farm Area:</span>
+                            <div className="font-medium">{farm.area || farm.totalFieldArea} ha</div>
+                          </div>
+                          <div>
+                            <span className="text-muted-foreground">Location:</span>
+                            <div className="font-medium truncate text-xs">{farm.location}</div>
+                          </div>
+                        </div>
+
+                        {/* Fields under this farm */}
+                        {farm.fields && farm.fields.length > 0 && (
+                          <div className="mt-3 space-y-2 border-t pt-3">
+                            <p className="text-xs font-semibold text-foreground">Fields:</p>
+                            {farm.fields.map((field: any) => (
+                              <div key={field.id} className="bg-secondary/5 rounded p-2 text-xs">
+                                <div className="flex items-center justify-between">
+                                  <span className="font-medium">{field.name}</span>
+                                  <Badge variant="outline" className="text-xs">
+                                    {field.area} ha
+                                  </Badge>
+                                </div>
+                                <div className="mt-1 grid grid-cols-2 gap-2 text-muted-foreground">
+                                  <span>Crop: {field.cropType || 'N/A'}</span>
+                                  <span>NDVI readings: {field.ndviDataCount}</span>
+                                </div>
+                                {field.latestNDVI && (
+                                  <div className="mt-1 text-muted-foreground">
+                                    Latest NDVI: {field.latestNDVI.value?.toFixed(3) || 'N/A'} ({field.latestNDVI.date})
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              )}
             </div>
           )}
         </main>

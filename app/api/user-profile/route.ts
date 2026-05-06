@@ -15,11 +15,23 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Fetch user with farmer profile
+    // Fetch user with farmer profile, farms, and fields
     const user = await prisma.user.findUnique({
       where: { id: userId },
       include: {
-        farmerProfile: true
+        farmerProfile: true,
+        farms: {
+          include: {
+            fields: {
+              include: {
+                ndviData: {
+                  orderBy: { date: 'desc' },
+                  take: 5
+                }
+              }
+            }
+          }
+        }
       }
     });
 
@@ -73,7 +85,31 @@ export async function GET(request: NextRequest) {
           previousYield: user.farmerProfile.previousYield,
           preferredLanguage: user.farmerProfile.preferredLanguage,
           isOnboardingComplete: user.farmerProfile.isOnboardingComplete
-        } : null
+        } : null,
+        farms: user.farms.map(farm => ({
+          id: farm.id,
+          name: farm.name,
+          description: farm.description,
+          location: farm.location,
+          area: farm.area,
+          createdAt: farm.createdAt,
+          fieldCount: farm.fields.length,
+          totalFieldArea: farm.fields.reduce((sum, f) => sum + (f.area || 0), 0),
+          fields: farm.fields.map(field => ({
+            id: field.id,
+            name: field.name,
+            cropType: field.cropType,
+            area: field.area,
+            coordinates: field.coordinates,
+            createdAt: field.createdAt,
+            ndviDataCount: field.ndviData.length,
+            latestNDVI: field.ndviData.length > 0 ? {
+              date: field.ndviData[0].date,
+              value: field.ndviData[0].value,
+              source: field.ndviData[0].source
+            } : null
+          }))
+        }))
       }
     });
 

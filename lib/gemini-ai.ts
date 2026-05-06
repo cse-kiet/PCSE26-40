@@ -312,13 +312,16 @@ class GeminiAIService {
     }
     
     this.genAI = new GoogleGenerativeAI(finalApiKey)
-    this.model = this.genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" })
+    this.model = this.genAI.getGenerativeModel({ model: "gemini-2.5-flash" })
   }
 
   /**
-   * Generate farming insights based on farmer data and user question
+   * Generate farming insights with retry logic for temporary API failures
    */
-  async generateInsight(farmerData: FarmerData, userQuestion: string): Promise<AIInsightResponse> {
+  async generateInsight(farmerData: FarmerData, userQuestion: string, retryCount: number = 0): Promise<AIInsightResponse> {
+    const MAX_RETRIES = 3
+    const BASE_DELAY = 2000 // 2 seconds
+    
     try {
       const prompt = this.buildPrompt(farmerData, userQuestion)
       
@@ -342,9 +345,119 @@ class GeminiAIService {
       return this.parseAIResponse(text)
       
     } catch (error) {
+      const isRetryable = this.isRetryableError(error)
+      
+      if (isRetryable && retryCount < MAX_RETRIES) {
+        const delay = BASE_DELAY * Math.pow(2, retryCount) // Exponential backoff
+        console.log(`[Gemini AI] Retry attempt ${retryCount + 1}/${MAX_RETRIES} after ${delay}ms...`)
+        
+        // Wait before retrying
+        await new Promise(resolve => setTimeout(resolve, delay))
+        
+        // Recursive retry call
+        return this.generateInsight(farmerData, userQuestion, retryCount + 1)
+      }
+      
+      // If not retryable or max retries exceeded, return fallback response
       console.error('[Gemini AI] Error generating insight:', error)
-      throw new Error(`Failed to generate AI insight: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      return this.getOfflineFallbackResponse(farmerData, userQuestion)
     }
+  }
+
+  /**
+   * Check if an error is worth retrying (503, 429, timeout, etc.)
+   */
+  private isRetryableError(error: any): boolean {
+    const errorMessage = error?.message || ''
+    const errorStatus = error?.status
+    
+    // Check for retryable HTTP status codes
+    if (errorStatus === 503 || errorStatus === 429 || errorStatus === 500 || errorStatus === 502) {
+      return true
+    }
+    
+    // Check error message for retryable patterns
+    if (errorMessage.includes('Service Unavailable') || 
+        errorMessage.includes('High demand') ||
+        errorMessage.includes('Too Many Requests') ||
+        errorMessage.includes('timeout') ||
+        errorMessage.includes('ECONNREFUSED')) {
+      return true
+    }
+    
+    return false
+  }
+
+  /**
+   * Provide fallback response when API is unavailable
+   */
+  private getOfflineFallbackResponse(farmerData: FarmerData, userQuestion: string): AIInsightResponse {
+    console.log('[Gemini AI] Using fallback response due to API unavailability')
+    
+    // Generate basic advice based on data we have
+    const basicAdvice = this.generateBasicAdvice(farmerData, userQuestion)
+    
+    return {
+      answer: `${basicAdvice.main} (Note: AI service temporarily unavailable - providing general guidance)`,
+      recommendations: basicAdvice.recommendations,
+      urgentAlerts: basicAdvice.alerts.length > 0 ? basicAdvice.alerts : undefined,
+      confidence: 60, // Lower confidence for offline mode
+      sources: ['Offline database', 'Agricultural guidelines']
+    }
+  }
+
+  /**
+   * Generate basic agricultural advice without AI
+   */
+  private generateBasicAdvice(farmerData: FarmerData, userQuestion: string): { main: string; recommendations: string[]; alerts: string[] } {
+    const crop = farmerData.cropName
+    const soilType = farmerData.soilType
+    const irrigation = farmerData.irrigationMethod
+    
+    let main = ''
+    let recommendations: string[] = []
+    let alerts: string[] = []
+    
+    // Check for critical conditions based on available data
+    if (farmerData.soilData && farmerData.soilData.length > 0) {
+      const latestSoil = farmerData.soilData[farmerData.soilData.length - 1]
+      if (latestSoil.moisture < 30) {
+        alerts.push('Soil moisture is critically low - irrigation needed immediately!')
+      }
+    }
+    
+    // Basic crop-specific advice
+    if (crop.toLowerCase().includes('wheat')) {
+      main = 'For wheat cultivation, focus on proper drainage and avoid waterlogging. Monitor for pest activity during growth stages.'
+      recommendations = [
+        'Maintain soil moisture between 60-70% for optimal growth',
+        'Apply nitrogen fertilizer at boot stage for better yield',
+        'Scout for armyworms and other pests every 7-10 days'
+      ]
+    } else if (crop.toLowerCase().includes('rice')) {
+      main = 'Rice requires consistent water management. Maintain 5-7cm water level during growing season.'
+      recommendations = [
+        'Keep field flooded during vegetative stage',
+        'Drain field 2 weeks before harvest',
+        'Monitor for blast disease in humid conditions'
+      ]
+    } else if (crop.toLowerCase().includes('corn') || crop.toLowerCase().includes('maize')) {
+      main = 'Maize needs adequate moisture and good drainage. Avoid waterlogging after germination.'
+      recommendations = [
+        'Apply irrigation when soil moisture falls below 50%',
+        'Monitor for fall armyworm especially in monsoon season',
+        'Support plants if strong winds are expected'
+      ]
+    } else {
+      main = `For ${crop} cultivation, follow standard crop management practices based on soil and weather conditions.`
+      recommendations = [
+        `Monitor soil moisture and adjust ${irrigation} irrigation accordingly`,
+        'Check for pest and disease symptoms regularly',
+        'Follow crop-specific nutrient management schedule'
+      ]
+    }
+    
+    return { main, recommendations, alerts }
   }
 
   /**

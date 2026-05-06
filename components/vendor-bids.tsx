@@ -99,11 +99,8 @@ export default function VendorBids() {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Google Sheet source (Published Sheet recommended)
-  const SHEET_ID = "1Zmj7Zc4I3MDSX6iYN904Y1vClwIgsGsxF-q23oJPNRY"
-  const SHEET_NAME = "fr1"
-  const SHEET_GID = "796375197" // Provided tab gid for reliable CSV export
-  const SHEET_CSV_URL = `/api/vendor-bids/sheet?sid=${encodeURIComponent(SHEET_ID)}&tab=${encodeURIComponent(SHEET_NAME)}${SHEET_GID ? `&gid=${encodeURIComponent(SHEET_GID)}` : ""}`
+  // Google Sheet source (Published Sheet)
+  const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTN9LPzY7Nq9IYKwya7XLWk4TBYNydWsmI08_EHgIheKdTCbekZBBCu0Ux6VU7ehPLNNQNC7xT5vLcc/pub?output=csv"
 
   const parseCsv = (csv: string): string[][] => {
     const lines = csv.replace(/\r/g, "").split("\n").filter(Boolean)
@@ -156,7 +153,10 @@ export default function VendorBids() {
     setLoading(true)
     setError(null)
     try {
+      console.log("🔄 Starting to fetch sheet data from:", SHEET_CSV_URL)
       const res = await fetch(SHEET_CSV_URL, { cache: "no-store" })
+      console.log("📡 Response status:", res.status, res.statusText)
+      
       if (!res.ok) {
         // Try to read JSON error if proxy returned helpful info
         let details = ""
@@ -164,14 +164,24 @@ export default function VendorBids() {
         throw new Error(`Sheet fetch failed: ${res.status}${details ? ` ${details}` : ""}`)
       }
       const csv = await res.text()
+      console.log("📄 Raw CSV data (first 500 chars):", csv.substring(0, 500))
+      console.log("📊 Full CSV length:", csv.length)
+      
       const rows = parseCsv(csv)
+      console.log("✅ Parsed rows count:", rows.length)
+      console.log("🔍 First few rows:", rows.slice(0, 3))
+      
       if (!rows.length) {
+        console.warn("⚠️ No rows found in CSV")
         setRemoteBids([])
         setLoading(false)
         return
       }
       const headers = rows[0].map(normalize)
       const dataRows = rows.slice(1)
+      console.log("📋 Headers found:", headers)
+      console.log("📈 Data rows count:", dataRows.length)
+      
       const findIdx = (...candidates: string[]) => {
         const normalizedCandidates = candidates.map(c => c.toLowerCase())
         const idx = headers.findIndex(h => {
@@ -193,6 +203,20 @@ export default function VendorBids() {
       const idxPhone = findIdx("phone_number", "phone", "contact_number", "mobile", "mobile_number")
       const idxValid = findIdx("valid_until", "valid_till", "expiry", "valid_till_date")
       const idxNotes = findIdx("notes", "remarks")
+      
+      console.log("🗂️ Column indices found:", {
+        vendor: idxVendor,
+        category: idxCategory,
+        item: idxItem,
+        price: idxPrice,
+        unit: idxUnit,
+        minQty: idxMinQty,
+        location: idxLocation,
+        delivery: idxDelivery,
+        phone: idxPhone,
+        valid: idxValid,
+        notes: idxNotes
+      })
 
       const parsed: VendorBid[] = dataRows
         .filter(r => r.length && (idxVendor >= 0 ? r[idxVendor] : r.some(Boolean)))
@@ -223,9 +247,11 @@ export default function VendorBids() {
           }
           return bid
         })
+      console.log("✨ Successfully parsed bids:", parsed.length, parsed)
       setRemoteBids(parsed)
     } catch (e: any) {
-      console.error("Failed to load sheet bids", e)
+      console.error("❌ Error loading sheet bids:", e)
+      console.error("Error details:", e?.message, e?.stack)
       setError(e?.message || "Failed to load bids from sheet")
       setRemoteBids([])
     } finally {

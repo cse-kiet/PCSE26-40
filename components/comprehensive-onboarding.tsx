@@ -253,7 +253,7 @@ export function ComprehensiveOnboarding({ onComplete, onSkip }: ComprehensiveOnb
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-full mb-4">
             <Globe className="w-8 h-8 text-primary-foreground" />
           </div>
-          <h1 className="text-3xl font-bold">Welcome to FarmSat</h1>
+          <h1 className="text-3xl font-bold">Welcome to AgriVision</h1>
           <p className="text-muted-foreground">
             AI-powered farming assistant with satellite data - Let's set up your complete profile
           </p>
